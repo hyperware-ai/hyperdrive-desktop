@@ -40,6 +40,7 @@
     "electron": "^32.1.2"
   },
   "dependencies": {
+    "argon2-browser": "^1.18.0",
     "electron": "^32.1.2",
     "electron-squirrel-startup": "^1.0.1"
   }

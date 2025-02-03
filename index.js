@@ -170,8 +170,6 @@ Menu.setApplicationMenu(menu);
 
 const createWindow = () => {
     win = new BrowserWindow({
-        //width: 1200,
-        //height: 800,
         width: width,
         height: height,
         webPreferences: {
@@ -180,8 +178,11 @@ const createWindow = () => {
             nativeWindowOpen: true,
             enableRemoteModule: true,
             sandbox: false,
-            nodeIntegrationInSubFrames: true, //for subContent nodeIntegration Enable
-            webviewTag: true //for webView
+            nodeIntegrationInSubFrames: true,
+            webviewTag: true,
+            webgl: true,
+            webSecurity: true,
+            allowRunningInsecureContent: false,
         }
     });
 
@@ -192,7 +193,10 @@ const createWindow = () => {
 
     splashScreenView = new BrowserView({
         webPreferences: {
-            preload: preloadPath
+            preload: preloadPath,
+            webSecurity: true,
+            allowRunningInsecureContent: false,
+            webgl: true,
         }
     });
     win.setBrowserView(splashScreenView);
@@ -256,7 +260,9 @@ ipcMain.on('go-home', (event, port) => {
     console.log('main: go-home');
 
     win.removeBrowserView(splashScreenView);
-    win.loadURL(`http://localhost:${port}`);
+    win.loadURL(`http://localhost:${port}`, {
+        extraHeaders: 'Cross-Origin-Opener-Policy: same-origin\nCross-Origin-Embedder-Policy: require-corp'
+    });
 });
 
 ipcMain.on('action', (event, action) => {
