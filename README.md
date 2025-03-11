@@ -1,6 +1,4 @@
-# Kinode for Desktop
-
-** BETA **
+# Hyperdrive for Desktop
 
 Currently supports Windows and Linux.
 
@@ -8,7 +6,7 @@ Currently supports Windows and Linux.
 
 ## Tour
 
-We're excited to release the Kinode Desktop beta for Windows and Linux!
+We're excited to release the Hyperdrive Desktop beta for Windows and Linux!
 You can download the binaries here: https://github.com/hyperware-ai/hyperdrive-desktop/releases
 
 ![image](https://github.com/user-attachments/assets/22314b54-61ab-4e65-a1c4-0765ef5f02f5)
