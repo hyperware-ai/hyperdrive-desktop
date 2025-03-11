@@ -61,8 +61,8 @@ module.exports = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'kinode-dao',
-          name: 'kinode-desktop'
+          owner: 'hyperware-ai',
+          name: 'hyperdrive-desktop'
         },
         prerelease: false,
         generateReleaseNotes: true

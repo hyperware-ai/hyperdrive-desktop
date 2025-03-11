@@ -11,7 +11,7 @@ if (require('electron-squirrel-startup')) {
 const width = 1200;
 const height = 800;
 
-let kinode;
+let hyperdrive;
 let homePort;
 homePort = '8080'; // default
 
@@ -45,8 +45,8 @@ const binariesPath =
 
 const binaryName =
     platform == 'win'
-        ? 'kinode.exe'
-        : 'kinode';
+        ? 'hyperdrive.exe'
+        : 'hyperdrive';
 
 const execPath = path.resolve(path.join(binariesPath, binaryName));
 
@@ -158,7 +158,7 @@ const template = [
                 label: 'Learn More',
                 click: async () => {
                     const { shell } = require('electron');
-                    await shell.openExternal('https://book.kinode.org');
+                    await shell.openExternal('https://book.hyperware.ai');
                 }
             }
         ]
@@ -211,9 +211,9 @@ app.on('activate', () => {
 });
 
 const handleShutdown = (haveQuitted) => {
-    // send SIGTERM to kinode
-    if (kinode) {
-        kinode.kill('SIGTERM');
+    // send SIGTERM to hyperdrive
+    if (hyperdrive) {
+        hyperdrive.kill('SIGTERM');
     }
 
     if (process.platform !== 'darwin' && !haveQuitted) {
@@ -235,19 +235,19 @@ ipcMain.on('node-form', (event, formData) => {
     }
     console.log(args);
 
-    kinode = spawn(execPath, args, {});
+    hyperdrive = spawn(execPath, args, {});
 
-    kinode.stdout.on('data', (data) => {
-        console.log(`kinode stdout: ${data}`);
+    hyperdrive.stdout.on('data', (data) => {
+        console.log(`hyperdrive stdout: ${data}`);
     });
 
-    kinode.stderr.on('data', (data) => {
-        console.error(`kinode stderr: ${data}`);
+    hyperdrive.stderr.on('data', (data) => {
+        console.error(`hyperdrive stderr: ${data}`);
     });
 
-    kinode.on('close', (code) => {
-        console.log(`kinode process exited with code ${code}`);
-        kinode = null;
+    hyperdrive.on('close', (code) => {
+        console.log(`hyperdrive process exited with code ${code}`);
+        hyperdrive = null;
     });
 });
 
