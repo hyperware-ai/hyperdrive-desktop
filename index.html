@@ -2,6 +2,8 @@
 
 <head>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@700&display=swap');
+
         /* CSS Reset and Base Styles */
         *,
         *::before,
@@ -9,6 +11,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         img,
@@ -18,6 +21,7 @@
         svg {
             display: block;
             max-width: 100%;
+            height: auto;
         }
 
         input,
@@ -27,11 +31,22 @@
             font-family: var(--font-family-main);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@700&display=swap');
-
         /* Variables */
         :root {
             color-scheme: light dark;
+            /* New neon colors from the second CSS */
+            --neon-green: #E5FF44;
+            --neon-green-light: #E5FF4488;
+            --neon-green-xlight: #E5FF4444;
+            --neon-blue: #44E5FF;
+            --neon-red: #FF44E5;
+            --neon-yellow: #FFFF44;
+            --neon-purple: #E544FF;
+            --neon-orange: #FF9944;
+            --neon-pink: #FF44B2;
+            --neon-cyan: #44FFE5;
+
+            /* Original colors kept for fallback */
             --orange: #FF4F00;
             --dark-orange: #cc4100;
             --blue: #2B88D9;
@@ -45,7 +60,26 @@
             --gray: #657b83;
             --tasteful-dark: #1f1f1f;
 
+            /* New theme variables */
+            --primary-color: var(--neon-green);
+            --primary-light: var(--neon-green-light);
+            --primary-xlight: var(--neon-green-xlight);
+            --secondary-color: var(--neon-blue);
+            --tertiary-color: var(--neon-red);
+            --quaternary-color: var(--neon-yellow);
+
             --font-family-main: 'Kode Mono', monospace;
+
+            /* Adding modern variables from second CSS */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --transition-fast: 150ms ease;
+            --transition-normal: 250ms ease;
+            --button-border-width: 2px;
         }
 
         /* Typography */
@@ -61,6 +95,7 @@
         span {
             font-family: var(--font-family-main);
             color: light-dark(var(--off-black), var(--off-white));
+            line-height: 1.5;
         }
 
         p,
@@ -94,12 +129,12 @@
 
         a {
             font-family: var(--font-family-main);
-            color: light-dark(var(--blue), var(--orange));
+            color: light-dark(var(--secondary-color), var(--primary-color));
             text-decoration: none;
         }
 
         a:hover {
-            color: light-dark(var(--orange), var(--dark-orange));
+            color: light-dark(var(--primary-color), var(--tertiary-color));
             text-decoration: underline wavy;
         }
 
@@ -108,7 +143,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             background-color: light-dark(var(--tan), var(--tasteful-dark));
-            background-image: radial-gradient(circle at -1% -47%, #4700002b 7%, transparent 58.05%), radial-gradient(circle at 81% 210%, #d6430550 17%, transparent 77.05%);
+            background-image: radial-gradient(circle at 81% 210%, var(--primary-light) 17%, transparent 77.05%);
             min-width: 100vw;
             min-height: 100vh;
         }
@@ -116,11 +151,11 @@
         /* Sections */
         section {
             background-color: light-dark(var(--white), var(--maroon));
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
             padding: 2rem;
             margin-bottom: 2rem;
-            transition: transform 0.3s ease;
+            transition: transform var(--transition-normal);
         }
 
         section:hover {
@@ -141,15 +176,20 @@
 
         form input {
             padding: 0.75rem;
-            border: 2px solid var(--orange);
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            border: var(--button-border-width) solid var(--primary-color);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            background-color: light-dark(var(--white), var(--off-black));
+            color: light-dark(var(--off-black), var(--off-white));
         }
 
         form input:focus {
             outline: none;
-            border-color: var(--dark-orange);
-            box-shadow: 0 0 0 3px rgba(255, 79, 0, 0.2);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px var(--primary-xlight);
+            animation: shine 0.4s ease-out;
+            background-size: 200% 100%;
+            background-image: linear-gradient(45deg, transparent 50%, var(--primary-xlight) 51%, var(--primary-light) 52%, transparent);
         }
 
         /* Button styles */
@@ -160,15 +200,26 @@
             font-weight: bold;
             text-align: center;
             text-decoration: none;
-            background-color: var(--orange);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            background-color: var(--primary-color);
+            color: var(--off-black);
+            /* Change from 'border: none' to transparent border of the same width */
+            border: var(--button-border-width) solid transparent;
+            border-radius: var(--radius-md);
+            transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+            /* Ensure consistent sizing */
+            box-sizing: border-box;
+            position: relative;
         }
 
         button:hover {
-            background-color: var(--dark-orange);
+            background-color: light-dark(var(--off-white), var(--off-black));
+            color: var(--primary-color);
+            border: var(--button-border-width) solid var(--primary-color);
+            /* Ensure the button doesn't change size when border is added */
+            box-sizing: border-box;
+            margin: 0;
+            /* Prevent any layout shift by maintaining dimensions */
+            transform: translateY(0);
         }
 
         button:disabled {
@@ -178,13 +229,13 @@
 
         button.secondary {
             background-color: light-dark(var(--off-white), var(--off-black));
-            color: var(--orange);
-            border: 2px solid var(--orange);
+            color: var(--primary-color);
+            border: var(--button-border-width) solid var(--primary-color);
         }
 
         button.secondary:hover {
-            background-color: var(--orange);
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--off-black);
         }
 
         .container {
@@ -200,17 +251,62 @@
             flex-direction: column;
         }
 
+        /* Add animation from second CSS */
+        @keyframes shine {
+            0% {
+                background-position: 200% 0%;
+            }
+
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        /* Mobile Optimizations from second CSS */
+        @media (max-width: 768px) {
+            :root {
+                --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.1);
+                --shadow-lg: 0 4px 6px -2px rgb(0 0 0 / 0.1);
+            }
+
+            section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: var(--radius-md);
+            }
+
+            form input {
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+
+            /* Add smooth scrolling */
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Dark mode optimizations */
+        @media (prefers-color-scheme: dark) {
+            form input {
+                background-color: var(--off-black);
+                color: var(--off-white);
+            }
+
+            button.secondary {
+                background-color: var(--off-black);
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-    <h1>Kinode</h1>
+    <h1>Hyperdrive</h1>
     <form id="node-form" class="form">
-        <h3>Select your Kinode home directory (where it will store files), or create a new one</h3>
+        <h3>Select your Hyperware home directory (where it will store files), or create a new one</h3>
         <div class="form-group">
             <input type="text" id="node-name" name="node-name" placeholder="Node Home Directory" readonly
-                title="Select the node's directory to store its home folder on disk. Note that this does not register the name in Kinode.">
+                title="Select the node's directory to store its home folder on disk. Note that this does not register the name in Hyperdrive.">
             <button id="select-dir">Select Directory</button>
         </div>
         <button id="submit" type="submit">Submit</button>

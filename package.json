@@ -1,7 +1,7 @@
 {
-  "name": "kinode-desktop",
-  "version": "0.5.0",
-  "description": "Kinode, for the desktop",
+  "name": "hyperdrive-desktop",
+  "version": "0.6.0",
+  "description": "Hyperdrive, for the desktop",
   "main": "index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -17,16 +17,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kinode-dao/kinode-desktop.git"
+    "url": "git+https://github.com/hyperware-ai/hyperdrive-desktop.git"
   },
   "author": "Sybil Technologies AG",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/kinode-dao/kinode-desktop/issues"
+    "url": "https://github.com/hyperware-ai/hyperdrive-desktop/issues"
   },
-  "homepage": "https://kinode.org",
+  "homepage": "https://hyperware.ai",
+  "optionalDependencies": {
+    "appdmg": "^0.6.6"
+  },
   "devDependencies": {
-    "appdmg": "^0.6.6",
     "@electron-forge/cli": "^7.5.0",
     "@electron-forge/maker-deb": "^7.5.0",
     "@electron-forge/maker-dmg": "^7.5.0",
