@@ -1,6 +1,6 @@
 {
   "name": "hyperdrive-desktop",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Hyperdrive, for the desktop",
   "main": "index.js",
   "scripts": {
