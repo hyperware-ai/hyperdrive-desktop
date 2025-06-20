@@ -70,6 +70,7 @@ npm run make
    - Follow the instructions to generate a Certificate Signing Request (CSR) using Keychain Access
    - Upload the CSR and download the certificate
    - Double-click the downloaded certificate to install it in your macOS Keychain
+   - If certificate installation doesn't work, make sure Keychain Access app is open with `login` keychain selected under the `Default Keychains` on the left
 
 3. **Find Your Team ID**:
    - In your Apple Developer account, go to "Membership"
