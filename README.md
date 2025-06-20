@@ -59,8 +59,21 @@ npm run make
 #### macOS Signing
 
 1. **Apple Developer Account**: You need an active Apple Developer account ($99/year)
-2. **Developer ID Certificate**: Create a "Developer ID Application" certificate in your Apple Developer account
-3. **Install Certificate**: Download and install the certificate in your macOS Keychain
+   - Sign up at https://developer.apple.com/programs/
+   - Complete the enrollment process with payment
+
+2. **Developer ID Certificate**: Create a "Developer ID Application" certificate
+   - Log in to https://developer.apple.com/account
+   - Navigate to "Certificates, Identifiers & Profiles"
+   - Click the "+" button to create a new certificate
+   - Select "Developer ID Application" under "Software"
+   - Follow the instructions to generate a Certificate Signing Request (CSR) using Keychain Access
+   - Upload the CSR and download the certificate
+   - Double-click the downloaded certificate to install it in your macOS Keychain
+
+3. **Find Your Team ID**:
+   - In your Apple Developer account, go to "Membership"
+   - Your Team ID is displayed there (10 alphanumeric characters)
 
 ### Environment Variables
 
@@ -68,10 +81,28 @@ The build process uses the following environment variables for signing:
 
 #### macOS Code Signing
 
-- `CODESIGN_IDENTITY`: Your Developer ID Application certificate identity (e.g., "Developer ID Application: Your Name (TEAMID)")
+- `CODESIGN_IDENTITY`: Your Developer ID Application certificate identity
+  - To find this, open Keychain Access on macOS
+  - Look for your "Developer ID Application" certificate
+  - The full name should be: "Developer ID Application: Your Name (TEAMID)"
+  - Example: `"Developer ID Application: Acme Corp (ABC123DEF4)"`
+
 - `APPLE_ID`: Your Apple ID email used for the developer account
-- `APPLE_ID_PASSWORD`: An app-specific password for your Apple ID (generate at appleid.apple.com)
+  - This is the email you use to log into developer.apple.com
+  - Example: `developer@example.com`
+
+- `APPLE_ID_PASSWORD`: An app-specific password for your Apple ID
+  - Go to https://appleid.apple.com/sign-in
+  - Sign in and navigate to "Sign-In and Security"
+  - Under "App-Specific Passwords", click "Generate Password"
+  - Give it a name like "Electron Notarization"
+  - Copy the generated password (format: `xxxx-xxxx-xxxx-xxxx`)
+  - Store this securely - you won't be able to see it again
+
 - `APPLE_TEAM_ID`: Your Apple Developer Team ID
+  - Found in your Apple Developer account under "Membership"
+  - 10 character alphanumeric string
+  - Example: `ABC123DEF4`
 
 ### Building with Code Signing
 
