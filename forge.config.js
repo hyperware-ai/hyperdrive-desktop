@@ -8,13 +8,20 @@ module.exports = {
     extraResource: [
       "./bin"
     ],
-    osxSign: {},
-    // osxNotarize: {
-    //   tool: 'notarytool',
-    //   appleId: process.env.APPLE_ID,
-    //   appleIdPassword: process.env.APPLE_PASSWORD,
-    //   teamId: process.env.APPLE_TEAM_ID
-    // }
+    osxSign: process.env.CODESIGN_IDENTITY ? {
+      identity: process.env.CODESIGN_IDENTITY,
+      hardenedRuntime: true,
+      gatekeeperAssess: false,
+      entitlements: 'entitlements.mac.plist',
+      'entitlements-inherit': 'entitlements.mac.plist',
+      'signature-flags': 'library'
+    } : {},
+    osxNotarize: process.env.APPLE_ID && process.env.APPLE_ID_PASSWORD && process.env.APPLE_TEAM_ID ? {
+      tool: 'notarytool',
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APPLE_ID_PASSWORD,
+      teamId: process.env.APPLE_TEAM_ID
+    } : undefined
   },
   rebuildConfig: {},
   makers: [

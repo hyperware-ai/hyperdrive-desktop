@@ -51,3 +51,58 @@ Very important to get back home after using an app!
 npm i
 npm run make
 ```
+
+## Signing
+
+### Prerequisites
+
+#### macOS Signing
+
+1. **Apple Developer Account**: You need an active Apple Developer account ($99/year)
+2. **Developer ID Certificate**: Create a "Developer ID Application" certificate in your Apple Developer account
+3. **Install Certificate**: Download and install the certificate in your macOS Keychain
+
+### Environment Variables
+
+The build process uses the following environment variables for signing:
+
+#### macOS Code Signing
+
+- `CODESIGN_IDENTITY`: Your Developer ID Application certificate identity (e.g., "Developer ID Application: Your Name (TEAMID)")
+- `APPLE_ID`: Your Apple ID email used for the developer account
+- `APPLE_ID_PASSWORD`: An app-specific password for your Apple ID (generate at appleid.apple.com)
+- `APPLE_TEAM_ID`: Your Apple Developer Team ID
+
+### Building with Code Signing
+
+#### macOS
+
+```bash
+# Set environment variables
+export CODESIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"
+export APPLE_ID="your-email@example.com"
+export APPLE_ID_PASSWORD="xxxx-xxxx-xxxx-xxxx"
+export APPLE_TEAM_ID="TEAMID"
+
+# Build for macOS with signing and notarization
+npm run make:mac
+```
+
+#### Cross-Platform Builds
+
+```bash
+# Build for specific platforms
+npm run make:mac    # macOS only
+npm run make:win    # Windows only
+npm run make:linux  # Linux only
+
+# Build for all platforms (signing only applies where configured)
+npm run make
+```
+
+### Notes
+
+- If environment variables are not set, the app will be built without signing
+- Notarization is only performed when all Apple credentials are provided
+- The signing process may take several minutes due to notarization
+- Windows and Linux builds are not affected by macOS signing configuration
