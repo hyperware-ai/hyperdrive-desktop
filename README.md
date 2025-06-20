@@ -120,6 +120,24 @@ export APPLE_TEAM_ID="TEAMID"
 npm run make:mac
 ```
 
+#### Notes
+
+- If environment variables are not set, the app will be built without signing
+- Notarization is only performed when all Apple credentials are provided
+- The signing process may take several minutes due to notarization
+- Windows and Linux builds are not affected by macOS signing configuration
+- Check the status of notarization with
+  ```
+  xcrun notarytool history --apple-id "your-email@example.com" --password "xxxx-xxxx-xxxx-xxxx" --team-id "TEAMID"
+  ```
+- Make sure you have accepted all terms on developer.apple.com/account
+  Apple periodically puts out new T&Cs for signing and you notarization will sit with status "In Progress" forever until you accept them
+- Make sure to
+  ```
+  npm run install appdmg
+  ```
+  on your macOS to be able to package the app
+
 #### Cross-Platform Builds
 
 ```bash
@@ -131,10 +149,3 @@ npm run make:linux  # Linux only
 # Build for all platforms (signing only applies where configured)
 npm run make
 ```
-
-### Notes
-
-- If environment variables are not set, the app will be built without signing
-- Notarization is only performed when all Apple credentials are provided
-- The signing process may take several minutes due to notarization
-- Windows and Linux builds are not affected by macOS signing configuration
