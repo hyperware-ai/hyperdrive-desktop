@@ -8,12 +8,24 @@ const nodeRpc = document.querySelector('#node-rpc');
 const selectDir = document.querySelector('#select-dir');
 const submit = document.querySelector('#submit');
 
+// Initially disable submit button
+submit.disabled = true;
+
+// Enable/disable submit button based on node name input
+nodeName.addEventListener('input', () => {
+    submit.disabled = !nodeName.value.trim();
+});
+
 selectDir.addEventListener('click', () => {
     window.localApi.sendAction('open-directory-dialog');
 });
 
 window.localApi.onSelectedDirectory(path => {
     document.getElementById('node-name').value = path;
+    // Enable submit button when directory is selected
+    submit.disabled = !path;
+    // Gray out the select directory button
+    selectDir.classList.add('grayed-out');
 });
 
 submit.addEventListener('click', (event) => {
@@ -100,6 +112,10 @@ function displayNodes(nodes, showAll = false) {
             document.getElementById('node-name').value = node.path;
             document.getElementById('node-port').value = node.port !== '8080' ? node.port : '';
             document.getElementById('node-rpc').value = node.rpc || '';
+            // Enable submit button when a node is selected
+            submit.disabled = false;
+            // Gray out the select directory button
+            selectDir.classList.add('grayed-out');
         });
 
         nodesList.appendChild(li);

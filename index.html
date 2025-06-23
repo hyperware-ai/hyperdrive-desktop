@@ -202,11 +202,6 @@
             box-shadow: 0 0 0 3px var(--primary-xlight);
         }
 
-        form input[readonly] {
-            background-color: light-dark(#f5f5f5, #2a2a2a);
-            cursor: not-allowed;
-        }
-
         /* Button styles */
         button {
             display: inline-block;
@@ -246,6 +241,22 @@
         button.secondary:hover:not(:disabled) {
             background-color: var(--primary-color);
             color: var(--off-black);
+        }
+
+        /* Grayed out button state */
+        button.grayed-out {
+            opacity: 0.6;
+            background-color: light-dark(#e0e0e0, #3a3a3a);
+            color: light-dark(var(--gray), #888);
+            border-color: light-dark(#ccc, #555);
+        }
+
+        button.grayed-out:hover:not(:disabled) {
+            background-color: light-dark(#d0d0d0, #2a2a2a);
+            color: light-dark(var(--gray), #999);
+            border-color: light-dark(#bbb, #666);
+            transform: none;
+            box-shadow: none;
         }
 
         .form-group {
@@ -298,10 +309,6 @@
                 background-color: var(--off-black);
                 color: var(--off-white);
                 border-color: var(--gray);
-            }
-
-            form input[readonly] {
-                background-color: #2a2a2a;
             }
 
             button.secondary {
@@ -484,7 +491,7 @@
     <form id="node-form" class="form">
         <h3>Select your Hyperware home directory (where it will store files), or create a new one</h3>
         <div class="form-group">
-            <input type="text" id="node-name" name="node-name" placeholder="Node Home Directory" readonly
+            <input type="text" id="node-name" name="node-name" placeholder="Node Home Directory"
                 title="Select the node's directory to store its home folder on disk. Note that this does not register the name in Hyperdrive.">
             <button id="select-dir">Select Directory</button>
         </div>
