@@ -2,7 +2,7 @@
 
 <head>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&display=swap');
 
         /* CSS Reset and Base Styles */
         *,
@@ -100,19 +100,26 @@
 
         p,
         li {
-            font-size: 0.8em;
+            font-size: 0.875rem;
         }
 
         h1 {
-            font-size: 2em;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
         }
 
         h2 {
-            font-size: 1.5em;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
         }
 
         h3 {
-            font-size: 1.3em;
+            font-size: 1.125rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            text-align: left;
         }
 
         h4 {
@@ -146,80 +153,83 @@
             background-image: radial-gradient(circle at 81% 210%, var(--primary-light) 17%, transparent 77.05%);
             min-width: 100vw;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Sections */
-        section {
-            background-color: light-dark(var(--white), var(--maroon));
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+        /* Container */
+        .container {
+            max-width: 600px;
+            width: 100%;
             padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform var(--transition-normal);
-        }
-
-        section:hover {
-            transform: translateY(-5px);
+            text-align: center;
         }
 
         /* Forms */
         form {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
+            background-color: light-dark(rgba(255, 255, 255, 0.95), rgba(31, 31, 31, 0.95));
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
         }
 
         form label {
             margin-bottom: 0.5rem;
-            font-weight: bold;
+            font-weight: 400;
+            text-align: left;
+            font-size: 0.875rem;
+            color: light-dark(var(--gray), var(--off-white));
         }
 
         form input {
             padding: 0.75rem;
-            border: var(--button-border-width) solid var(--primary-color);
+            border: var(--button-border-width) solid light-dark(var(--gray), var(--gray));
             border-radius: var(--radius-md);
             transition: all var(--transition-fast);
             background-color: light-dark(var(--white), var(--off-black));
             color: light-dark(var(--off-black), var(--off-white));
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         form input:focus {
             outline: none;
-            border-color: var(--primary-light);
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px var(--primary-xlight);
-            animation: shine 0.4s ease-out;
-            background-size: 200% 100%;
-            background-image: linear-gradient(45deg, transparent 50%, var(--primary-xlight) 51%, var(--primary-light) 52%, transparent);
+        }
+
+        form input[readonly] {
+            background-color: light-dark(#f5f5f5, #2a2a2a);
+            cursor: not-allowed;
         }
 
         /* Button styles */
         button {
             display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
             text-align: center;
             text-decoration: none;
             background-color: var(--primary-color);
             color: var(--off-black);
-            /* Change from 'border: none' to transparent border of the same width */
             border: var(--button-border-width) solid transparent;
             border-radius: var(--radius-md);
-            transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-            /* Ensure consistent sizing */
-            box-sizing: border-box;
-            position: relative;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            width: 100%;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             background-color: light-dark(var(--off-white), var(--off-black));
             color: var(--primary-color);
-            border: var(--button-border-width) solid var(--primary-color);
-            /* Ensure the button doesn't change size when border is added */
-            box-sizing: border-box;
-            margin: 0;
-            /* Prevent any layout shift by maintaining dimensions */
-            transform: translateY(0);
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         button:disabled {
@@ -233,73 +243,242 @@
             border: var(--button-border-width) solid var(--primary-color);
         }
 
-        button.secondary:hover {
+        button.secondary:hover:not(:disabled) {
             background-color: var(--primary-color);
             color: var(--off-black);
-        }
-
-        .container {
-            max-width: 600px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
+            gap: 0.75rem;
+            text-align: left;
         }
 
-        /* Add animation from second CSS */
-        @keyframes shine {
-            0% {
-                background-position: 200% 0%;
-            }
-
-            100% {
-                background-position: 0% 0%;
-            }
+        .form-group button {
+            margin-top: 0.5rem;
         }
 
-        /* Mobile Optimizations from second CSS */
-        @media (max-width: 768px) {
-            :root {
-                --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.1);
-                --shadow-lg: 0 4px 6px -2px rgb(0 0 0 / 0.1);
-            }
+        /* Details/Summary styling */
+        details {
+            margin-top: 1rem;
+            text-align: left;
+        }
 
-            section {
-                padding: 1rem;
-                margin-bottom: 1rem;
-                border-radius: var(--radius-md);
-            }
+        summary {
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: light-dark(var(--gray), var(--off-white));
+            padding: 0.5rem 0;
+            transition: color var(--transition-fast);
+        }
 
-            form input {
-                font-size: 16px; /* Prevent zoom on iOS */
-            }
+        summary:hover {
+            color: var(--primary-color);
+        }
 
-            /* Add smooth scrolling */
-            html {
-                scroll-behavior: smooth;
-            }
+        details[open] summary {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        details > div {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         /* Dark mode optimizations */
         @media (prefers-color-scheme: dark) {
+            form {
+                background-color: rgba(31, 31, 31, 0.95);
+            }
+
             form input {
                 background-color: var(--off-black);
                 color: var(--off-white);
+                border-color: var(--gray);
+            }
+
+            form input[readonly] {
+                background-color: #2a2a2a;
             }
 
             button.secondary {
                 background-color: var(--off-black);
             }
         }
+
+        /* Update notification styles */
+        .update-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--neon-yellow);
+            color: var(--off-black);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .update-notification.show {
+            display: block;
+        }
+
+        .update-notification h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .update-notification p {
+            margin: 0 0 1rem 0;
+            font-size: 0.875rem;
+        }
+
+        .update-notification .button-group {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .update-notification button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            width: auto;
+            min-width: 100px;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Previously booted nodes styles */
+        #node-dirs {
+            margin-top: 2rem;
+            background-color: light-dark(rgba(255, 255, 255, 0.95), rgba(31, 31, 31, 0.95));
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        #node-dirs h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        #node-dirs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .node-item {
+            background-color: light-dark(var(--white), var(--off-black));
+            border: 2px solid light-dark(var(--gray), var(--gray));
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: left;
+        }
+
+        .node-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .node-item .node-path {
+            font-weight: 700;
+            color: light-dark(var(--off-black), var(--off-white));
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            word-break: break-all;
+        }
+
+        .node-item .node-details {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .show-more-btn {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        #node-dirs.hidden {
+            display: none;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            .update-notification {
+                width: calc(100% - 2rem);
+                min-width: auto;
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+            }
+
+            .update-notification .button-group {
+                flex-direction: column;
+            }
+
+            .update-notification button {
+                width: 100%;
+            }
+
+            #node-dirs {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="update-notification" class="update-notification">
+        <h4>Update Available!</h4>
+        <p id="update-message"></p>
+        <div class="button-group">
+            <button id="download-update">Download Update</button>
+            <button id="dismiss-update" class="secondary">Dismiss</button>
+        </div>
+    </div>
     <div class="container">
     <h1>Hyperdrive</h1>
     <form id="node-form" class="form">
@@ -325,9 +504,10 @@
         </details>
     </form>
 
-    <div id="node-dirs">
+    <div id="node-dirs" class="hidden">
         <h2>Previously booted nodes</h2>
         <ul id="node-dirs-list"></ul>
+        <button id="show-more-btn" class="show-more-btn secondary" style="display: none;">Show more</button>
     </div>
     <script src="./main.js"></script>
     </div>
