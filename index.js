@@ -1,6 +1,9 @@
-const { app, BrowserView, BrowserWindow, dialog, Menu, ipcMain } = require('electron');
+const { app, BrowserView, BrowserWindow, dialog, Menu, ipcMain, shell } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const https = require('https');
+const fs = require('fs');
+const { version } = require('./package.json');
 
 // https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // https://github.com/electron/windows-installer?tab=readme-ov-file#handling-squirrel-events
@@ -51,6 +54,104 @@ const binaryName =
 const execPath = path.resolve(path.join(binariesPath, binaryName));
 
 const isMac = process.platform === 'darwin';
+
+// Storage for previously booted nodes
+const nodesFilePath = path.join(app.getPath('userData'), 'booted-nodes.json');
+
+function loadBootedNodes() {
+    try {
+        if (fs.existsSync(nodesFilePath)) {
+            const data = fs.readFileSync(nodesFilePath, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.error('Error loading booted nodes:', error);
+    }
+    return [];
+}
+
+function saveBootedNodes(nodes) {
+    try {
+        fs.writeFileSync(nodesFilePath, JSON.stringify(nodes, null, 2));
+    } catch (error) {
+        console.error('Error saving booted nodes:', error);
+    }
+}
+
+function addBootedNode(nodePath, nodePort, nodeRpc) {
+    let nodes = loadBootedNodes();
+
+    // Remove existing entry if it exists
+    nodes = nodes.filter(node => node.path !== nodePath);
+
+    // Add new entry at the beginning
+    nodes.unshift({
+        path: nodePath,
+        port: nodePort || '8080',
+        rpc: nodeRpc || null,
+        lastUsed: new Date().toISOString()
+    });
+
+    // Keep only the most recent 10 nodes
+    nodes = nodes.slice(0, 10);
+
+    saveBootedNodes(nodes);
+}
+
+// Check for updates
+async function checkForUpdates() {
+    return new Promise((resolve) => {
+        https.get('https://api.github.com/repos/hyperware-ai/hyperdrive-desktop/releases/latest', {
+            headers: {
+                'User-Agent': 'hyperdrive-desktop'
+            }
+        }, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const release = JSON.parse(data);
+                    const latestVersion = release.tag_name.replace('v', '');
+
+                    // Compare versions
+                    const currentParts = version.split('.').map(Number);
+                    const latestParts = latestVersion.split('.').map(Number);
+
+                    let needsUpdate = false;
+                    for (let i = 0; i < 3; i++) {
+                        if (latestParts[i] > currentParts[i]) {
+                            needsUpdate = true;
+                            break;
+                        } else if (latestParts[i] < currentParts[i]) {
+                            break;
+                        }
+                    }
+
+                    if (needsUpdate) {
+                        resolve({
+                            available: true,
+                            currentVersion: version,
+                            latestVersion: latestVersion,
+                            downloadUrl: release.html_url
+                        });
+                    } else {
+                        resolve({ available: false });
+                    }
+                } catch (error) {
+                    console.error('Error parsing update response:', error);
+                    resolve({ available: false });
+                }
+            });
+        }).on('error', (error) => {
+            console.error('Error checking for updates:', error);
+            resolve({ available: false });
+        });
+    });
+}
 
 const template = [
     // { role: 'appMenu' }
@@ -169,9 +270,7 @@ const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
 
 const createWindow = () => {
-    win = new BrowserWindow({
-        //width: 1200,
-        //height: 800,
+    const windowOptions = {
         width: width,
         height: height,
         webPreferences: {
@@ -183,7 +282,14 @@ const createWindow = () => {
             nodeIntegrationInSubFrames: true, //for subContent nodeIntegration Enable
             webviewTag: true //for webView
         }
-    });
+    };
+
+    // Set icon for Linux
+    if (platform === 'linux') {
+        windowOptions.icon = path.join(__dirname, 'icons', 'icon.png');
+    }
+
+    win = new BrowserWindow(windowOptions);
 
     const preloadPath =
         app.isPackaged
@@ -200,6 +306,18 @@ const createWindow = () => {
     splashScreenView.setAutoResize({ width: true, height: true });
     splashScreenView.webContents.loadFile('index.html');
     win.setTopBrowserView(splashScreenView);
+
+    // Check for updates after window loads
+    splashScreenView.webContents.once('did-finish-load', async () => {
+        const updateInfo = await checkForUpdates();
+        if (updateInfo.available) {
+            splashScreenView.webContents.send('update-available', updateInfo);
+        }
+
+        // Send previously booted nodes
+        const nodes = loadBootedNodes();
+        splashScreenView.webContents.send('booted-nodes', nodes);
+    });
 };
 
 app.whenReady().then(createWindow);
@@ -234,6 +352,9 @@ ipcMain.on('node-form', (event, formData) => {
         args.push('--rpc', formData.nodeRpc);
     }
     console.log(args);
+
+    // Save the node to previously booted nodes
+    addBootedNode(formData.nodeName, formData.nodePort, formData.nodeRpc);
 
     hyperdrive = spawn(execPath, args, {});
 
@@ -273,4 +394,13 @@ ipcMain.on('action', (event, action) => {
             console.log(err);
         });
     }
+});
+
+ipcMain.on('open-download-url', (event, url) => {
+    shell.openExternal(url);
+});
+
+ipcMain.on('load-booted-nodes', (event) => {
+    const nodes = loadBootedNodes();
+    event.sender.send('booted-nodes', nodes);
 });
