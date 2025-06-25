@@ -9,7 +9,7 @@ Currently supports Windows and Linux.
 We're excited to release the Hyperdrive Desktop beta for Windows and Linux!
 You can download the binaries here: https://github.com/hyperware-ai/hyperdrive-desktop/releases
 
-![image](https://github.com/user-attachments/assets/22314b54-61ab-4e65-a1c4-0765ef5f02f5)
+![home](https://github.com/user-attachments/assets/870ec4c0-a562-45ff-905a-a5beca18e08f)
 
 If you're a Linux user, it should Just Work™.
 
@@ -24,13 +24,13 @@ When you first open the application after installing, you should see a splash sc
 
 You'll need to select an existing node home directory or create a new one using the `Select Directory` dialog. If creating a new one, you'll need to connect your favorite wallet
 
-![image](https://github.com/user-attachments/assets/867e9f1a-be55-4280-9ba5-f2bfe64e4ad5)
+![splash](https://github.com/user-attachments/assets/40fcdefb-7fb4-4333-91a3-cafc35874046)
 
-![image](https://github.com/user-attachments/assets/e58a140e-1793-49dd-80be-629b60a1f514)
+![select a node](https://github.com/user-attachments/assets/647e379e-9dca-4ca0-bed4-2ff00137786d)
 
-![image](https://github.com/user-attachments/assets/8cb81f23-cbf4-4475-a50d-0c014d9caf39)
+![submit a node](https://github.com/user-attachments/assets/cc175130-fd12-4106-bb1b-2fc65fd289a2)
 
-![image](https://github.com/user-attachments/assets/feb2a3ef-8173-4a22-bfb7-e39b944fd137)
+![login](https://github.com/user-attachments/assets/45690daa-5a32-4ece-9720-f4d87522130c)
 
 Once you're in, there's one more thing of interest to call your attention to.
 In the top-left menu, you've got a `File > Home` button that will take you back to your homescreen when clicked (hotkey `Ctrl + H`).
