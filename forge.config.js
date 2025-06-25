@@ -27,7 +27,7 @@ module.exports = {
     afterCopy: [
       async (buildPath, electronVersion, platform, arch, callback) => {
         if (platform === 'darwin' && process.env.CODESIGN_IDENTITY) {
-          const binaryPath = path.join(buildPath, 'Hyperdrive Desktop.app', 'Contents', 'Resources', 'bin', 'mac', 'hyperdrive');
+          const binaryPath = path.join(buildPath, 'bin', 'mac', 'hyperdrive');
           console.log(`Signing binary at: ${binaryPath}`);
 
           const codesign = spawn('codesign', [
