@@ -1,5 +1,7 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const path = require('path');
+const { spawn } = require('child_process');
 
 module.exports = {
   packagerConfig: {
@@ -21,7 +23,44 @@ module.exports = {
       appleId: process.env.APPLE_ID,
       appleIdPassword: process.env.APPLE_ID_PASSWORD,
       teamId: process.env.APPLE_TEAM_ID
-    } : undefined
+    } : undefined,
+    afterCopy: [
+      async (buildPath, electronVersion, platform, arch, callback) => {
+        if (platform === 'darwin' && process.env.CODESIGN_IDENTITY) {
+          const binaryPath = path.join(buildPath, 'Hyperdrive Desktop.app', 'Contents', 'Resources', 'bin', 'mac', 'hyperdrive');
+          console.log(`Signing binary at: ${binaryPath}`);
+
+          const codesign = spawn('codesign', [
+            '--sign', process.env.CODESIGN_IDENTITY,
+            '--force',
+            '--deep',
+            '--timestamp',
+            '--options', 'runtime',
+            '--entitlements', 'entitlements.mac.plist',
+            binaryPath
+          ]);
+
+          codesign.stdout.on('data', (data) => {
+            console.log(`codesign stdout: ${data}`);
+          });
+
+          codesign.stderr.on('data', (data) => {
+            console.error(`codesign stderr: ${data}`);
+          });
+
+          codesign.on('close', (code) => {
+            if (code !== 0) {
+              callback(new Error(`codesign process exited with code ${code}`));
+            } else {
+              console.log('Binary signed successfully');
+              callback();
+            }
+          });
+        } else {
+          callback();
+        }
+      }
+    ]
   },
   rebuildConfig: {},
   makers: [
